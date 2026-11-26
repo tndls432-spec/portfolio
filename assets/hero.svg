@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+  <!-- 임시 실루엣: assets/hero.jpg 로 본인 사진을 넣고 data.js 의 hero.image 를 바꾸세요 -->
+  <defs>
+    <radialGradient id="skin" cx="45%" cy="40%" r="60%">
+      <stop offset="0" stop-color="#d9a98c"/>
+      <stop offset="1" stop-color="#8a5a45"/>
+    </radialGradient>
+    <linearGradient id="cap" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e4e0f0"/>
+      <stop offset="1" stop-color="#b9b2cf"/>
+    </linearGradient>
+  </defs>
+  <!-- shoulders -->
+  <ellipse cx="520" cy="1040" rx="420" ry="260" fill="#1b1b1d"/>
+  <!-- neck -->
+  <rect x="420" y="640" width="180" height="260" rx="80" fill="#7a4c3a"/>
+  <!-- head -->
+  <ellipse cx="500" cy="430" rx="235" ry="290" fill="url(#skin)"/>
+  <!-- ear -->
+  <ellipse cx="700" cy="450" rx="45" ry="80" fill="#9a6550"/>
+  <!-- hair -->
+  <path d="M290 330 Q300 190 500 180 Q700 185 735 330 L735 300 Q690 380 640 360 L330 370 Z" fill="#3a2a22"/>
+  <!-- cap -->
+  <path d="M260 290 Q280 70 520 60 Q760 70 790 290 Q520 230 260 290 Z" fill="url(#cap)"/>
+  <path d="M260 290 Q180 300 150 340 Q330 330 560 280 Z" fill="#cfc9e2"/>
+  <!-- sunglasses -->
+  <rect x="250" y="360" width="400" height="80" rx="38" fill="#141416"/>
+  <rect x="640" y="385" width="110" height="18" rx="9" fill="#141416"/>
+</svg>
