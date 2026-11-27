@@ -31,11 +31,11 @@ window.PORTFOLIO = {
     {
       id: "about", label: "ABOUT ME", type: "profile", x: 22, y: 12,
       cover: { kind: "type", text: "허", colors: ["#111", "#f4f1ea"] },
-      bio: "숫자로 위험을 읽고, 근거로 설명하는 사람이 되고 싶습니다. 수학과에서 해석학·미분방정식을, 경제학 복수전공에서 경제학원론을 공부하며 두 분야가 모두 잘 맞는다는 것을 확인했고, 리스크 관리·계리 직무를 목표로 준비하고 있습니다.",
+      bio: "숫자로 위험을 읽고, 근거로 설명하는 사람이 되고 싶습니다. 수학과에서 해석학·미분방정식을, 경제학 부전공으로 경제학원론을 공부하며 두 분야가 모두 잘 맞는다는 것을 확인했고, 리스크 관리·계리 직무를 목표로 준비하고 있습니다.",
       facts: [
         ["학교", "전남대학교 수학과 2학년 2학기"],
-        ["복수전공", "경제학과 · 교직이수"],
-        ["학점", "4.29 / 4.5 (2-1 학과 1등)"],
+        ["부전공", "경제학 · 교직이수"],
+        ["학점", "4.29 / 4.5 · 학과 누적 2등 (2-1 학기 1등)"],
         ["동아리", "BLASH (기업·산업 분석) · 홍보부 기자"],
         ["과외", "5년차 · 현재 중3, 고2 담당"],
         ["목표 직무", "리스크 관리 · 계리"],
@@ -46,13 +46,13 @@ window.PORTFOLIO = {
       id: "journey", label: "PATH", type: "detail", x: 33, y: 23,
       cover: { kind: "wave", colors: ["#0a0a0a", "#d9d9d9"] },
       meta: "전자공학 → 직접 해본 일들 → 수학·경제",
-      description: "전남대 전자공학과에서 2년을 공부한 뒤, SNS 운영과 온라인 판매를 직접 해보며 내가 오래 잘할 수 있는 일이 무엇인지 찾았습니다. 그 답은 근거를 세우고 분석하는 일이었고, 수학과에 진학해 경제학을 복수전공하며 학과 1등이라는 결과로 확인했습니다.",
+      description: "전남대 전자공학과에서 2년을 공부한 뒤, SNS 운영과 온라인 판매를 직접 해보며 내가 오래 잘할 수 있는 일이 무엇인지 찾았습니다. 그 답은 근거를 세우고 분석하는 일이었고, 수학과에 진학해 경제학을 부전공하며 학과 상위권(누적 2등, 2-1 학기 1등)이라는 결과로 확인했습니다.",
     },
     {
       id: "academics", label: "학업 4.29", type: "detail", x: 29, y: 40,
       cover: { kind: "type", text: "4.29", colors: ["#1638d8", "#ffffff"] },
-      meta: "전남대 수학과 · 경제학 복수전공 · 교직이수",
-      description: "학점 4.29, 2-1 학기 학과 1등.",
+      meta: "전남대 수학과 · 경제학 부전공 · 교직이수",
+      description: "학점 4.29, 학과 누적 2등, 2-1 학기 학과 1등.",
       tags: ["해석학", "미분방정식", "경제학원론 1·2"],
     },
 
@@ -126,7 +126,7 @@ window.PORTFOLIO = {
       cover: { kind: "type", text: "1st", colors: ["#111", "#ffcf3a"] },
       entries: [
         { year: "2026", title: "HD현대삼호 기업분석 경진대회", note: "예선 통과 (17팀 중 10팀) · 최종 발표 예정" },
-        { year: "2026", title: "전남대 수학과 2-1 학과 1등", note: "학점 4.29" },
+        { year: "2026", title: "전남대 수학과 2-1 학기 학과 1등", note: "학점 4.29 · 학과 누적 2등" },
       ],
     },
 
@@ -138,6 +138,21 @@ window.PORTFOLIO = {
       description: "수학(해석학·미분방정식)과 경제가 모두 잘 맞고, 근거와 데이터로 전문성 있게 설명하는 일에 강점이 있습니다. 숫자로 위험을 읽고 설명하는 리스크 관리·계리 직무를 목표로 준비하고 있습니다.",
     },
 
+    {
+      id: "roadmap", label: "ROADMAP", type: "list", x: 12, y: 60,
+      cover: { kind: "type", text: "→", colors: ["#0f3a5c", "#9bd7ff"] },
+      entries: [
+        { year: "2026.12", title: "HD현대삼호 경진대회 최종 발표 · TOEIC", note: "계리사 1차 응시 요건(공인영어) 확보" },
+        { year: "2027.01", title: "체코생명과학대학 수학·통계 연수", note: "1월 16일 ~ 31일" },
+        { year: "2027.04", title: "보험계리사 1차 시험 응시", note: "보험수학 · 회계원리 · 경제학원론 · 보험계약법 · 보험업법" },
+        { year: "2027.07", title: "한국은행 통화정책 경시대회 · ADsP", note: "Python으로 생명표 기반 보험료 계산 프로젝트" },
+        { year: "2027.10", title: "보험산업 대학생 아이디어 공모전", note: "보험 도메인 PT" },
+        { year: "2028.02", title: "DB보험금융공모전 (학술·논문)", note: "동계 체험형 인턴 지원" },
+        { year: "2028.03", title: "교생실습", note: "" },
+        { year: "2028.07", title: "보험계리사 2차 (부분합격 목표)", note: "계리리스크관리 · 보험수리학 등" },
+        { year: "2028.09", title: "보험사 계리 · 금융권 리스크관리 지원", note: "2029.02 졸업" },
+      ],
+    },
     /* ================= 발표자료 ================= */
     {
       id: "ppt", label: "발표자료", type: "folder", category: "ppt", x: 47, y: 76,
@@ -175,7 +190,7 @@ window.PORTFOLIO = {
     { label: "수상·성과", open: "awards", icon: "star", colors: ["#f8c400", "#ffe680"] },
     "sep",
     { label: "발표자료", open: "ppt", icon: "slides", colors: ["#f5f5f5", "#ffffff"] },
-    { label: "Path", open: "journey", icon: "doc", colors: ["#fff", "#f1f1f1"] },
+    { label: "Roadmap", open: "roadmap", icon: "doc", colors: ["#fff", "#f1f1f1"] },
     "sep",
     { label: "Instagram", href: "owner.instagram", icon: "camera", colors: ["#f9a13a", "#c2338e"] },
     { label: "Mail", open: "contact", icon: "mail", colors: ["#1e90ff", "#5ac8fa"] },
