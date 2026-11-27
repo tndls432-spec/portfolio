@@ -144,9 +144,8 @@ window.PORTFOLIO = {
       entries: [
         { year: "2026.12", title: "HD현대삼호 경진대회 최종 발표", note: "토익 공부 시작" },
         { year: "2027.01", title: "체코생명과학대학 수학·통계 프로그램", note: "1월 16일 ~ 31일" },
-        { year: "2027.02", title: "토익 750+", note: "" },
-        { year: "2027.03", title: "SQLD", note: "회계원리 · 회귀분석 수강" },
-        { year: "2027.08", title: "리스크 분석 프로젝트", note: "코스피 폭락 구간 MDD · VaR · Expected Shortfall (엑셀 · SQL)" },
+        { year: "2027.02", title: "DB보험금융공모전 · 토익 750+", note: "코스피 폭락 구간 MDD · VaR · Expected Shortfall 분석 논문" },
+        { year: "2027 상반기", title: "SQLD", note: "회계원리 · 회귀분석 수강" },
         { year: "2027.11", title: "FRM Part I", note: "시장·신용 리스크" },
         { year: "2027.12", title: "동계 리스크 인턴", note: "캐피탈 · 카드 · 증권 · 보험사" },
         { year: "2028.03", title: "교생실습", note: "" },
