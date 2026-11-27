@@ -174,6 +174,7 @@
     const n = cascade++ % 6;
     el.style.left = Math.max(16, (innerWidth - w) / 2 - 60 + n * 28) + "px";
     el.style.top = Math.max(40, (innerHeight - 110 - h) / 2 - 20 + n * 24) + "px";
+    if (it.max) el.classList.add("is-max");
 
     const state = { el, stack: [] };
     wins.set(id, state);
@@ -252,6 +253,57 @@
     links && links.length
       ? `<div class="btns">${links.map((l, i) => `<a class="btn ${i ? "btn--ghost" : ""}" href="${esc(l.href)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</div>`
       : "";
+
+  /* --- planner / contests helpers --- */
+  const DAY = 864e5;
+  const toDate = (s) => new Date(s + "T00:00:00");
+  const today = () => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; };
+  const dday = (s) => Math.round((toDate(s) - today()) / DAY);
+  const ddayLabel = (n) => (n === 0 ? "D-DAY" : n > 0 ? `D-${n}` : `D+${-n}`);
+  const fmt = (s) => (s ? s.replaceAll("-", ".") : "");
+  const table = (head, rows) =>
+    `<div class="tbl"><table><thead><tr>${head.map((h) => `<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+
+  const DONE_KEY = "planner-done";
+  let done = new Set();
+  try { done = new Set(JSON.parse(localStorage.getItem(DONE_KEY) || "[]")); } catch {}
+  const saveDone = () => { try { localStorage.setItem(DONE_KEY, JSON.stringify([...done])); } catch {} };
+  const checklist = (tasks) =>
+    `<ul class="chk">${tasks.map(([id, t]) => `<li><label><input type="checkbox" data-task="${esc(id)}"${done.has(id) ? " checked" : ""}><span>${esc(t)}</span></label></li>`).join("")}</ul>`;
+  const progress = (tasks) => {
+    const n = tasks.filter(([id]) => done.has(id)).length;
+    return `<div class="prog"><div class="prog__bar"><i style="width:${tasks.length ? Math.round((n / tasks.length) * 100) : 0}%"></i></div><span>${n} / ${tasks.length}</span></div>`;
+  };
+
+  // returns [label, class]; class: on | soon | tbd | off | joined
+  function contestStatus(c) {
+    if (c.joined) return [c.joined, "joined"];
+    if (!c.end) return [c.when || "일정 미정", "tbd"];
+    const de = dday(c.end);
+    if (de < 0) return ["마감", "off"];
+    if (c.start && dday(c.start) > 0) return [`모집 예정 · 시작 ${ddayLabel(dday(c.start))}`, "soon"];
+    return [c.est ? `공고 확인 필요 · 작년 마감 ${ddayLabel(de)}` : `접수 중 · 마감 ${ddayLabel(de)}`, "on"];
+  }
+  const ORDER = { on: 0, soon: 1, tbd: 2, off: 3 };
+  const rank = (c, cls) => ORDER[cls] + (c.fit === "✕" ? 10 : 0);
+  const sortedContests = (kind) =>
+    (window.CONTESTS ? window.CONTESTS.items : [])
+      .filter((c) => !c.joined && (!kind || c.kind === kind))
+      .map((c) => [c, contestStatus(c)])
+      .sort((a, b) => rank(a[0], a[1][1]) - rank(b[0], b[1][1]) || (a[0].end || "9").localeCompare(b[0].end || "9"))
+      .map(([c]) => c);
+  const contestCard = (c) => {
+    const [label, cls] = contestStatus(c);
+    const period = c.end || c.start ? `${fmt(c.start) || "?"} ~ ${fmt(c.end)}` : c.when || "";
+    return `<article class="ct ct--${cls}">
+      <div class="ct__top"><span class="ct__kind">${esc(c.kind)}</span><span class="ct__status">${esc(label)}</span>${c.est ? '<span class="ct__est">작년 기준 추정</span>' : ""}</div>
+      <h3 class="ct__name">${esc(c.name)}</h3>
+      <p class="ct__meta">${esc(c.host)} · ${esc(period)}</p>
+      <p class="ct__why"><b>${esc(c.fit)}</b> ${esc(c.why || "")}</p>
+      ${c.note ? `<p class="ct__note">${esc(c.note)}</p>` : ""}
+      ${c.link ? `<a class="ct__link" href="${esc(c.link)}" target="_blank" rel="noopener">공고 보기 ↗</a>` : ""}
+    </article>`;
+  };
 
   const renderers = {
     profile(it, body) {
@@ -353,6 +405,83 @@
           <a class="btn" href="mailto:${esc(D.owner.email)}">메일 보내기</a>
           <a class="btn btn--ghost" href="${esc(D.owner.instagram)}" target="_blank" rel="noopener">Instagram ↗</a>
         </div>`;
+    },
+
+    planner(it, body) {
+      const P = window.PLANNER;
+      const tabs = [["now", "지금 할 일"], ["roadmap", "전체 로드맵"], ["week", "주간 시간표"], ["exam", "자격증·시험"], ["contest", "공모전·대외활동"], ["python", "파이썬 6주"], ["job", "직무 분석"]];
+      body.innerHTML = html`
+        <p class="h-eyebrow">목표 · ${esc(P.goal)}</p>
+        <h1 class="h-title">Planner</h1>
+        <nav class="tabs">${tabs.map(([k, l]) => `<button class="tab" data-tab="${k}">${l}</button>`).join("")}</nav>
+        <div class="pl"></div>
+        <p class="pl__foot">체크 표시는 이 브라우저에만 저장됩니다 · 계획 갱신 ${esc(P.updated)}</p>`;
+      const panel = $(".pl", body);
+      const t = today();
+      const now = P.phases.find((p) => toDate(p.start) <= t && t <= toDate(p.end)) || (t < toDate(P.phases[0].start) ? P.phases[0] : P.phases[P.phases.length - 1]);
+      const phase = (p) => `
+        <section class="ph${p === now ? " is-now" : ""}">
+          <header class="ph__head">
+            <div><span class="ph__date">${fmt(p.start)} ~ ${fmt(p.end)}${p === now ? " · 지금" : ""}</span><h3 class="ph__name">${esc(p.name)}</h3><p class="ph__goal">${esc(p.goal)}</p></div>
+            ${progress(p.tasks)}
+          </header>
+          ${checklist(p.tasks)}
+        </section>`;
+      const views = {
+        now() {
+          const up = P.deadlines.filter((d) => dday(d.date) >= 0).slice(0, 6);
+          const live = sortedContests().filter((c) => contestStatus(c)[1] === "on");
+          return `${phase(now)}
+            <h2 class="sec__h">다가오는 일정</h2>
+            <ul class="dl">${up.map((d) => `<li><b>${ddayLabel(dday(d.date))}</b><span class="dl__date">${fmt(d.date)}</span><span>${esc(d.label)}${d.est ? ' <em class="ct__est">추정</em>' : ""}</span></li>`).join("")}</ul>
+            ${live.length ? `<h2 class="sec__h">지금 접수 중인 공모전·대외활동</h2><div class="cts">${live.map(contestCard).join("")}</div>` : ""}`;
+        },
+        roadmap: () => P.phases.map(phase).join(""),
+        week: () => `<p class="p">${esc(P.week.note)}</p><h2 class="sec__h">${esc(P.week.normal.title)}</h2>${table(P.week.normal.head, P.week.normal.rows)}<ul class="rules">${P.week.rules.map((r) => `<li>${esc(r)}</li>`).join("")}</ul>`,
+        exam: () => table(P.exams.head, P.exams.rows),
+        contest: () => `<p class="p">전체 목록과 참가 이력은 바탕화면의 '공모전·경진대회' 창에 있습니다.</p><div class="cts">${sortedContests().map(contestCard).join("")}</div>`,
+        python: () => `<p class="p">${esc(P.python.intro)}</p><section class="ph">${progress(P.python.weeks)}${checklist(P.python.weeks)}</section><h2 class="sec__h">원칙</h2><ul class="rules">${P.python.rules.map((r) => `<li>${esc(r)}</li>`).join("")}</ul><h2 class="sec__h">SQL ↔ pandas</h2>${table(["SQL", "pandas"], P.python.sql)}`,
+        job: () => `<p class="p">${esc(P.job.intro)}</p>${table(P.job.head, P.job.rows)}<h2 class="sec__h">나의 위치</h2>${table(["구분", "내용"], P.job.gaps)}`,
+      };
+      let cur = "now";
+      try { cur = localStorage.getItem("planner-tab") || "now"; } catch {}
+      const show = (k) => {
+        cur = views[k] ? k : "now";
+        body.querySelectorAll(".tab").forEach((b) => b.classList.toggle("is-on", b.dataset.tab === cur));
+        panel.innerHTML = views[cur]();
+        try { localStorage.setItem("planner-tab", cur); } catch {}
+      };
+      body.querySelectorAll(".tab").forEach((b) => (b.onclick = () => show(b.dataset.tab)));
+      panel.addEventListener("change", (e) => {
+        const id = e.target.dataset && e.target.dataset.task;
+        if (!id) return;
+        e.target.checked ? done.add(id) : done.delete(id);
+        saveDone();
+        show(cur);
+      });
+      show(cur);
+    },
+
+    contests(it, body) {
+      const C = window.CONTESTS;
+      const joined = C.items.filter((c) => c.joined);
+      const kinds = ["전체", "공모전", "경진대회", "대외활동"];
+      body.innerHTML = html`
+        <p class="h-eyebrow">업데이트 ${esc(C.updated)} · ${esc(C.cadence)}</p>
+        <h1 class="h-title">공모전 · 경진대회</h1>
+        <p class="p">리스크관리 직무에 맞는 공모전·경진대회·대외활동을 접수 상태순으로 정리했습니다. '작년 기준 추정'은 올해 공고 전이라 공고가 뜨면 날짜를 확인하세요.</p>
+        <h2 class="sec__h">참가 이력</h2>
+        <div class="cts">${joined.map(contestCard).join("")}</div>
+        <h2 class="sec__h">모집 일정</h2>
+        <nav class="tabs">${kinds.map((k) => `<button class="tab" data-kind="${k}">${k}</button>`).join("")}</nav>
+        <div class="cts" id="ct-list"></div>`;
+      const list = $("#ct-list", body);
+      const show = (k) => {
+        body.querySelectorAll("[data-kind]").forEach((b) => b.classList.toggle("is-on", b.dataset.kind === k));
+        list.innerHTML = sortedContests(k === "전체" ? null : k).map(contestCard).join("");
+      };
+      body.querySelectorAll("[data-kind]").forEach((b) => (b.onclick = () => show(b.dataset.kind)));
+      show("전체");
     },
   };
 

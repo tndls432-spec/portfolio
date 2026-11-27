@@ -139,19 +139,12 @@ window.PORTFOLIO = {
     },
 
     {
-      id: "roadmap", label: "ROADMAP", type: "list", x: 12, y: 60,
-      cover: { kind: "type", text: "→", colors: ["#0f3a5c", "#9bd7ff"] },
-      entries: [
-        { year: "2026.12", title: "HD현대삼호 경진대회 최종 발표", note: "토익 공부 시작" },
-        { year: "2027.01", title: "체코생명과학대학 수학·통계 프로그램", note: "1월 16일 ~ 31일" },
-        { year: "2027.02", title: "DB보험금융공모전 · 토익 750+", note: "코스피 폭락 구간 MDD · VaR · Expected Shortfall 분석 논문" },
-        { year: "2027 상반기", title: "SQLD", note: "회계원리 · 회귀분석 수강" },
-        { year: "2027.11", title: "FRM Part I", note: "시장·신용 리스크" },
-        { year: "2027.12", title: "동계 리스크 인턴", note: "캐피탈 · 카드 · 증권 · 보험사" },
-        { year: "2028.03", title: "교생실습", note: "" },
-        { year: "2028.07", title: "하계 리스크 인턴", note: "" },
-        { year: "2028.09", title: "금융권 리스크관리 지원", note: "2029.02 졸업" },
-      ],
+      id: "planner", label: "PLANNER", type: "planner", max: true, x: 12, y: 60,
+      cover: { kind: "type", text: "✓", colors: ["#0f3a5c", "#9bd7ff"] },
+    },
+    {
+      id: "contests", label: "공모전·경진대회", type: "contests", max: true, x: 13, y: 80,
+      cover: { kind: "type", text: "🏁", colors: ["#fff3d6", "#111"] },
     },
     /* ================= 발표자료 ================= */
     {
@@ -186,11 +179,11 @@ window.PORTFOLIO = {
   dock: [
     { label: "About", open: "about", icon: "user", colors: ["#2b2b8f", "#6b6bff"] },
     { label: "BLASH", open: "blash", icon: "grid", colors: ["#0f3a5c", "#2e9bf0"] },
-    { label: "경진대회", open: "hd-contest", icon: "flag", colors: ["#5b1010", "#ff5a3c"] },
+    { label: "공모전·경진대회", open: "contests", icon: "flag", colors: ["#5b1010", "#ff5a3c"] },
     { label: "수상·성과", open: "awards", icon: "star", colors: ["#f8c400", "#ffe680"] },
     "sep",
     { label: "발표자료", open: "ppt", icon: "slides", colors: ["#f5f5f5", "#ffffff"] },
-    { label: "Roadmap", open: "roadmap", icon: "doc", colors: ["#fff", "#f1f1f1"] },
+    { label: "Planner", open: "planner", icon: "doc", colors: ["#fff", "#f1f1f1"] },
     "sep",
     { label: "Instagram", href: "owner.instagram", icon: "camera", colors: ["#f9a13a", "#c2338e"] },
     { label: "Mail", open: "contact", icon: "mail", colors: ["#1e90ff", "#5ac8fa"] },
