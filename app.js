@@ -300,6 +300,7 @@
         <h1 class="h-title">${esc(it.label)}</h1>
         ${tagsHTML(it.tags)}
         <p class="p">${esc(it.description || "")}</p>
+        ${(it.sections || []).map((s) => `<h2 class="sec__h">${esc(s.h)}</h2><p class="p">${esc(s.body)}</p>`).join("")}
         ${it.images && it.images.length ? `<div class="gallery">${it.images.map((s) => `<img src="${esc(s)}" alt="" loading="lazy">`).join("")}</div>` : ""}
         ${linksHTML(it.links)}`;
     },
